@@ -14,6 +14,12 @@ covid$day = weekdays(covid$date)
 
 wi <- covid[covid$state == 'WI',]
 wi60 <- tail(wi, 60)
+
+fl <- covid[covid$state == 'FL',]
+fl60 <- tail(fl, 60)
+
+az <- covid[covid$state == 'AZ',]
+az60 <- tail(az, 60)
 ```
 
 # Positive Tests
@@ -21,7 +27,23 @@ wi60 <- tail(wi, 60)
 plot(wi60$date, wi60$positiveIncreasePct, type="l")
 ```
 
-# Hospitalizations Increase
+# WI Hospitalizations Increase
 ```{r}
 plot(wi60$date, wi60$hospitalizedIncrease, type="l")
+```
+
+# FL Hospitalizations Increase
+```{r}
+plot(fl60$date, fl60$hospitalizedIncrease, type="l")
+```
+
+# AZ Hospitalization increase
+```{r}
+plot(az60$date, az60$hospitalizedIncrease, type="l")
+```
+
+
+# Test Increases
+```{r}
+plot(wi60$date, wi60$totalTestResultsIncrease, type="l")
 ```
