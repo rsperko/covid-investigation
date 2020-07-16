@@ -5,44 +5,62 @@ mv ~/Downloads/daily.csv data/2020-07-16_covidtracking.com_all-states.csv
 ```
 
 ```{r}
+statePopulations <- read.csv("data/state_populations.csv")
+statePopulations$X2019_Population <- as.numeric(gsub(",", "", statePopulations$X2019_Population))
+min(statePopulations$X2019_Population)
+```
+
+```{r}
 covidRaw <- read.csv("data/2020-07-16_covidtracking.com_all-states.csv")
 covid <- data.frame(covidRaw)
 covid$date <- as.Date(as.character(covid$date), format="%Y%m%d")
 covid <- covid[order(covid$date),]
 covid$positiveIncreasePct <- covid$positiveIncrease/covid$totalTestResultsIncrease
-covid$day = weekdays(covid$date)
+covid$day <- weekdays(covid$date)
+
+statePopulations <- read.csv("data/state_populations.csv")
+statePopulations$X2019_Population <- as.numeric(gsub(",", "", statePopulations$X2019_Population))
+statePopulations$populationMultiplier <- statePopulations$X2019_Population/min(statePopulations$X2019_Population)
+
+covid <- merge(x=covid, y=statePopulations, by="state")
+
+#covid$hospitalizedIncreasePerCapita <- covid$hospitalizedIncrease/covid$populationMultiplier
+#covid$totalTestResultsIncreasePerCapita <- covid$totalTestResultsIncrease/covid$populationMultiplier
 
 wi <- covid[covid$state == 'WI',]
 wi60 <- tail(wi, 60)
+wi90 <- tail(wi, 90)
 
 fl <- covid[covid$state == 'FL',]
 fl60 <- tail(fl, 60)
+fl90 <- tail(fl, 90)
 
 az <- covid[covid$state == 'AZ',]
 az60 <- tail(az, 60)
+az90 <- tail(az, 90)
 ```
 
-# Positive Tests
+# Positive Tests Percentage
 ```{r}
-plot(wi60$date, wi60$positiveIncreasePct, type="l", col="green", ylim=c(0, 0.45), xlab="Dates", ylab="Hospitalizations")
-lines(wi60$date, fl60$positiveIncreasePct, type="l", col="red")
-lines(wi60$date, az60$positiveIncreasePct, type="l", col="blue")
+plot(wi90$date, wi90$positiveIncreasePct, type="l", col="green", ylim=c(0, 1), xlab="Dates", ylab="Positive Tests")
+lines(wi90$date, fl90$positiveIncreasePct, type="l", col="red")
+lines(wi90$date, az90$positiveIncreasePct, type="l", col="blue")
 legend(x="topleft", legend=c("WI", "FL", "AZ"), col=c("green", "red", "blue"), lty=1)
 ```
 
 # Hospitalizations Increase
 ```{r}
-plot(wi60$date, wi60$hospitalizedIncrease, type="l", col="green", ylim=c(0, 500), xlab="Dates", ylab="Hospitalizations")
-lines(wi60$date, fl60$hospitalizedIncrease, type="l", col="red")
-lines(wi60$date, az60$hospitalizedIncrease, type="l", col="blue")
+plot(wi90$date, wi90$hospitalizedIncreasePerCapita, type="l", col="green", xlab="Dates", ylab="Hospitalizations")
+lines(wi90$date, fl90$hospitalizedIncreasePerCapita, type="l", col="red")
+lines(wi90$date, az90$hospitalizedIncreasePerCapita, type="l", col="blue")
 legend(x="topleft", legend=c("WI", "FL", "AZ"), col=c("green", "red", "blue"), lty=1)
 ```
 
 
 # Test Increases
 ```{r}
-plot(wi60$date, wi60$totalTestResultsIncrease, type="l", col="green", ylim=c(0, 100000), xlab="Dates", ylab="Hospitalizations")
-lines(wi60$date, fl60$totalTestResultsIncrease, type="l", col="red")
-lines(wi60$date, az60$totalTestResultsIncrease, type="l", col="blue")
+plot(wi60$date, wi60$totalTestResultsIncreasePerCapita, type="l", col="green", ylim=c(0, 0.001), xlab="Dates", ylab="Hospitalizations")
+lines(wi60$date, fl60$totalTestResultsIncreasePerCapita, type="l", col="red")
+lines(wi60$date, az60$totalTestResultsIncreasePerCapita, type="l", col="blue")
 legend(x="topleft", legend=c("WI", "FL", "AZ"), col=c("green", "red", "blue"), lty=1)
 ```
