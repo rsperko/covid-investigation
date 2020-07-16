@@ -1,5 +1,9 @@
 The Covid Tracking Project https://covidtracking.com/data/download
 
+```{bash}
+mv ~/Downloads/daily.csv data/2020-07-16_covidtracking.com_all-states.csv
+```
+
 ```{r}
 covidRaw <- read.csv("data/2020-07-16_covidtracking.com_all-states.csv")
 covid <- data.frame(covidRaw)
@@ -14,7 +18,7 @@ wi60 <- tail(wi, 60)
 
 # Positive Tests
 ```{r}
-
+plot(wi60$date, wi60$positiveIncreasePct, type="l")
 ```
 
 # Hospitalizations Increase
