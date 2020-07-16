@@ -1,0 +1,23 @@
+The Covid Tracking Project https://covidtracking.com/data/download
+
+```{r}
+covidRaw <- read.csv("data/2020-07-16_covidtracking.com_all-states.csv")
+covid <- data.frame(covidRaw)
+covid$date <- as.Date(as.character(covid$date), format="%Y%m%d")
+covid <- covid[order(covid$date),]
+covid$positiveIncreasePct <- covid$positiveIncrease/covid$totalTestResultsIncrease
+covid$day = weekdays(covid$date)
+
+wi <- covid[covid$state == 'WI',]
+wi60 <- tail(wi, 60)
+```
+
+# Positive Tests
+```{r}
+
+```
+
+# Hospitalizations Increase
+```{r}
+plot(wi60$date, wi60$hospitalizedIncrease, type="l")
+```
