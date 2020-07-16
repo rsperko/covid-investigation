@@ -24,26 +24,25 @@ az60 <- tail(az, 60)
 
 # Positive Tests
 ```{r}
-plot(wi60$date, wi60$positiveIncreasePct, type="l")
+plot(wi60$date, wi60$positiveIncreasePct, type="l", col="green", ylim=c(0, 0.45), xlab="Dates", ylab="Hospitalizations")
+lines(wi60$date, fl60$positiveIncreasePct, type="l", col="red")
+lines(wi60$date, az60$positiveIncreasePct, type="l", col="blue")
+legend(x="topleft", legend=c("WI", "FL", "AZ"), col=c("green", "red", "blue"), lty=1)
 ```
 
-# WI Hospitalizations Increase
+# Hospitalizations Increase
 ```{r}
-plot(wi60$date, wi60$hospitalizedIncrease, type="l")
-```
-
-# FL Hospitalizations Increase
-```{r}
-plot(fl60$date, fl60$hospitalizedIncrease, type="l")
-```
-
-# AZ Hospitalization increase
-```{r}
-plot(az60$date, az60$hospitalizedIncrease, type="l")
+plot(wi60$date, wi60$hospitalizedIncrease, type="l", col="green", ylim=c(0, 500), xlab="Dates", ylab="Hospitalizations")
+lines(wi60$date, fl60$hospitalizedIncrease, type="l", col="red")
+lines(wi60$date, az60$hospitalizedIncrease, type="l", col="blue")
+legend(x="topleft", legend=c("WI", "FL", "AZ"), col=c("green", "red", "blue"), lty=1)
 ```
 
 
 # Test Increases
 ```{r}
-plot(wi60$date, wi60$totalTestResultsIncrease, type="l")
+plot(wi60$date, wi60$totalTestResultsIncrease, type="l", col="green", ylim=c(0, 100000), xlab="Dates", ylab="Hospitalizations")
+lines(wi60$date, fl60$totalTestResultsIncrease, type="l", col="red")
+lines(wi60$date, az60$totalTestResultsIncrease, type="l", col="blue")
+legend(x="topleft", legend=c("WI", "FL", "AZ"), col=c("green", "red", "blue"), lty=1)
 ```
